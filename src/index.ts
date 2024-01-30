@@ -45,18 +45,30 @@ function generateFarcasterFrameMetaTag({ frame, imageUrl, postUrl, buttons }: IF
 }
 
 function frameGenerator(frameProps: IFrameProps): string {
-
     const metaTag = generateFarcasterFrameMetaTag(frameProps);
 
     const html = `<!DOCTYPE html>
         <html>
             <head>
                 <meta charset="utf-8">
-                <title>Farcaster x Express Frame template</title>
-                <meta property="og:title" content="Sam Broner's express farcaster frame template" />
-                <meta property="og:image" content="https://example.com/img.png" />
+                <title>Sheep Counter</title>
+                <meta property="og:title" content="Sheep Counter" />
+                <meta property="og:image" content="${frameProps.imageUrl}" />
                 ${metaTag}
             </head>
+            <body>
+                <img src="${frameProps.imageUrl}" alt="Frame Image" />
+                <div id="counter">0</div>
+                <button id="countButton">Count</button>
+
+                <script>
+                    let count = 0;
+                    document.getElementById('countButton').addEventListener('click', () => {
+                        count++;
+                        document.getElementById('counter').textContent = count;
+                    });
+                </script>
+            </body>
         </html>
     `;
     return html;
@@ -65,8 +77,8 @@ function frameGenerator(frameProps: IFrameProps): string {
 app.get('/frame', (req, res) => {
 
     const frameProps: IFrameProps = {
-        imageUrl: 'https://i.imgur.com/osEKmhB.png',
-        buttons: ['get', 'button2'],
+        imageUrl: 'https://i.imgur.com/tpSgwjH.png',
+        buttons: ['Count'],
     };
 
     res.status(200).send(frameGenerator(frameProps));
@@ -77,8 +89,8 @@ app.post('/frame', (req, res) => {
     console.log(req.body)
 
     const frameProps: IFrameProps = {
-        imageUrl:  'https://i.imgur.com/osEKmhB.png',
-        buttons: ['post', 'button2'],
+        imageUrl:  'https://i.imgur.com/tpSgwjH.png',
+        buttons: ['Count'],
 
     };
     
